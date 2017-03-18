@@ -1,0 +1,56 @@
+<project name="Sample Salesforce Ant tasks for multiple orgs" default="retrieveMetadata" basedir="." xmlns:sf="antlib:com.salesforce">
+
+    <property environment="env"/>
+ 	<condition property="sf.org" value="dev"> <not> <isset property="sf.org"/> </not> </condition>
+    <property file="${sf.org}.properties"/>
+    <!-- Setting default value for username, password and session id properties to empty string
+         so unset values are treated as empty. Without this, ant expressions such as ${sf.username}
+         will be treated literally.
+    -->
+
+    <condition property="sf.username" value=""> <not> <isset property="sf.username"/> </not> </condition>
+    <condition property="sf.serverurl" value=""> <not> <isset property="sf.serverurl"/> </not> </condition>
+    <condition property="jwt.clientid" value=""> <not> <isset property="jwt.clientid"/> </not> </condition>
+    <!--<condition property="sf.password" value=""> <not> <isset property="sf.password"/> </not> </condition>
+    <condition property="sf.sessionId" value=""> <not> <isset property="sf.sessionId"/> </not> </condition>-->
+
+
+    <taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce">
+        <classpath>
+            <pathelement location="./ant-salesforce.jar" />
+        </classpath>
+    </taskdef>
+
+	<!-- Retrieve metadata from org -->
+	<target name="retrieveMetadata">
+
+        <exec executable="/bin/bash" output="session.properties" vmlauncher="false" failonerror="yes">
+            <arg value="jwlogin.sh"/>
+            <arg value="${sf.username}"/>
+            <arg value="${sf.serverurl}"/>
+            <arg value="${jwt.clientid}"/>
+        </exec>
+        <property file="session.properties"/>
+
+		<echo>
+jwt.clientid       : ${jwt.clientid}
+sf.username        : ${sf.username}
+sf.serverurl       : ${sf.serverurl}
+jwt.instance       : ${jwt.instance}
+jwt.token          : ${jwt.token}
+metadata.directory : ${metadata.directory}
+jwt.t : ${jwt.t}
+		</echo>
+        <!---->
+		<mkdir dir="${metadata.directory}"/>
+		<delete includeEmptyDirs="true">
+            <fileset dir="${metadata.directory}" includes="**/*" excludes="package.xml" /> 
+        </delete>
+		<sf:retrieve
+      	sessionId="${jwt.token}" serverurl="${jwt.instance}"
+      	maxPoll="500" pollWaitMillis="10000" retrieveTarget="${metadata.directory}"
+      	unpackaged="src/package.xml"/>
+
+	</target>
+
+</project>
