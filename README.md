@@ -14,3 +14,5 @@
     - sf.username
     - sf.serverurl : https://test.salesforce.com or https://login.salesforce.com
     - jwt.clientid : the client ID of your connected app
+
+Link to blog post that supported this development: http://doingpoorly.blogspot.com/2014/11/jwt-bearer-token-flow-can-be-used-for.html
