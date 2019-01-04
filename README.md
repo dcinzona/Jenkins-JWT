@@ -16,3 +16,17 @@
     - jwt.clientid : the client ID of your connected app
 
 Link to blog post that supported this development: http://doingpoorly.blogspot.com/2014/11/jwt-bearer-token-flow-can-be-used-for.html
+
+
+### Gov Cloud
+
+- Use the "My Domain" URL instead of login.salesforce.com / test.salesforce.com
+
+#### Testing connectivity with jwlogin.sh
+
+You can test connectivity by manually running jwlogin.sh on your workstation and manually specifying parameters.
+- Make sure you run jwlogin.sh from the same directory that contains your digital certificate private key (and the file should be named 'private.key')
+
+**Example**:
+
+`./jwlogin.sh username@agency.gov https://agency.my.salesforce.com connectedAppClientId`
