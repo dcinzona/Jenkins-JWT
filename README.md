@@ -1,7 +1,7 @@
 ### Must configure a connected app with a digital certificate
 ### Code to generate the certificate:
     openssl req \
-        -subj "/C=US/ST=DC/L=Washington, DC/O=SoundExchange/CN=AcumenSolutions.com" \
+        -subj "/C=US/ST=DC/L=Washington, DC/O=My Organization/CN=example.com" \
         -newkey rsa:2048 -nodes -keyout private.key \
         -x509 -days 3650 -out public.crt
 
